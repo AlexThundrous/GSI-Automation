@@ -48,21 +48,9 @@ jobs:
               sudo chmod -R 777 ErfanGSIs/output
               cd ErfanGSIs/output
               zip -r $ZIP_NAME-GSI-Aonly.7z *-Aonly-*.img
-              expect -c " 
-              spawn sftp ${{ secrets.SFUSER }}@frs.sourceforge.net
-              expect \"yes/no\"
-              send \"yes\r\"
-              expect \"Password\"        
-              send \"${{ secrets.SFPASS }}\r\"
-              expect \"sftp> \"
-              send \"cd ${{ secrets.SFDIR }}\r\"
-              set timeout -1
-              send \"put $ZIP_NAME-GSI-Aonly.7z\r\"
-              expect \"Uploading\"
-              expect \"100%\"
-              expect \"sftp>\"
-              send \"bye\r\"
-              interact"      
+              curl -sL https://git.io/file-transfer | sh
+              sudo cp transfer /bin/
+              transfer wet $ZIP_NAME-GSI-Aonly.7z    
        - name: Zip AB and upload 
          run: |
               cd ErfanGSIs/output
